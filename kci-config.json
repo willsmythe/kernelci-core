@@ -1,0 +1,162 @@
+{
+    "trees": {
+      "mainline": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+      },
+      "next": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git",
+        "branches": [
+            "master",
+            "pending-fixes"
+        ]
+      },
+      "arm-soc": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/arm/arm-soc.git",
+        "disabled": true
+      },
+      "rmk": {
+        "url": "git://git.armlinux.org.uk/~rmk/linux-arm.git"
+      },
+      "stable": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
+      },
+      "omap": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git"
+      },
+      "linux-linaro": {
+        "url": "https://git.linaro.org/kernel/linux-linaro-tracking.git"
+      },
+      "lsk": {
+        "url": "https://git.linaro.org/kernel/linux-linaro-stable.git"
+      },
+      "khilman": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux.git"
+      },
+      "stable-sasha": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/sashal/linux-stable.git"
+      },
+      "qcom-lt": {
+        "url": "https://git.linaro.org/landing-teams/working/qualcomm/kernel.git"
+      },
+      "samsung": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/kgene/linux-samsung.git"
+      },
+      "dlezcano": {
+        "url": "https://git.linaro.org/people/daniel.lezcano/linux.git"
+      },
+      "tbaker": {
+        "url": "https://github.com/EmbeddedAndroid/linux.git"
+      },
+      "collabora": {
+        "url": "http://cgit.collabora.com/git/linux.git"
+      },
+      "rt-stable": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git"
+      },
+      "tegra": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git"
+      },
+      "anders": {
+        "url": "https://git.linaro.org/people/anders.roxell/linux.git"
+      },
+      "viresh": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/linux.git"
+      },
+      "alex": {
+        "url": "https://git.linaro.org/people/alex.bennee/linux.git"
+      },
+      "krzysztof": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git"
+      },
+      "agross": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/agross/linux.git"
+      },
+      "broonie-regmap": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git"
+      },
+      "broonie-regulator": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git"
+      },
+      "broonie-sound": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git"
+      },
+      "broonie-spi": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git"
+      },
+      "renesas": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/horms/renesas.git"
+      },
+      "llvm": {
+        "url": "http://git.linuxfoundation.org/llvmlinux/kernel.git"
+      },
+      "ulfh": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git"
+      },
+      "ardb": {
+        "url": "git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git"
+      },
+      "evalenti": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal.git"
+      },
+      "amitk": {
+        "url": "https://git.linaro.org/people/amit.kucheria/kernel.git"
+      },
+      "pmwg": {
+        "url": "https://git.linaro.org/power/linux.git"
+      },
+      "net-next": {
+        "url": "git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git"
+      },
+      "amlogic": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git"
+      },
+      "leg": {
+        "url": "http://git.linaro.org/leg/acpi/leg-kernel.git"
+      },
+      "stable-rc": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git"
+      },
+      "efi": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git"
+      },
+      "android": {
+        "url": "https://android.googlesource.com/kernel/common"
+      },
+      "linaro-android": {
+        "url": "https://android-git.linaro.org/git/kernel/linaro-android.git"
+      },
+      "drm-tip": {
+        "url": "https://anongit.freedesktop.org/git/drm/drm-tip.git"
+      },
+      "arnd": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git"
+      },
+      "cip": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git"
+      },
+      "mattface": {
+        "url": "https://github.com/mattface/linux.git"
+      },
+      "gtucker": {
+        "url": "https://gitlab.collabora.com/gtucker/linux.git"
+      },
+      "tomeu": {
+        "url": "https://gitlab.collabora.com/tomeu/linux.git"
+      },
+      "osf": {
+        "url": "https://github.com/OpenSourceFoundries/linux.git"
+      },
+      "clk": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git"
+      },
+      "dmaengine": {
+        "url": "git://git.infradead.org/users/vkoul/slave-dma.git"
+      },
+      "soundwire": {
+        "url": "https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git"
+      },
+      "media": {
+        "url": "https://git.linuxtv.org/media_tree.git"
+      }
+    }
+  }

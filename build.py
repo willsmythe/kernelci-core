@@ -163,7 +163,7 @@ else:
     os.environ['ARCH'] = arch
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:sgeJ:j:")
+    opts, args = getopt.getopt(sys.argv[1:], "b:c:ipsgeJ:j:")
 
 except getopt.GetoptError as err:
     print str(err) # will print something like "option -a not recognized"
@@ -175,7 +175,7 @@ for o, a in opts:
     if o == '-c':
         defs = a.split('+')
         for a in defs:
-            if os.path.exists("arch/%s/configs/%s" % (arch, a)):
+            if os.path.exists("arch/%s/configs/%s" % (arch, a)):                
                 defconfig = a
             elif a == "defconfig" or a == "tinyconfig" or re.match("all(\w*)config", a):
                 defconfig = a
@@ -201,9 +201,9 @@ for o, a in opts:
     if o == '-p':
         config = ConfigParser.ConfigParser()
         try:
-            config.read(os.path.expanduser('~/.buildpy.cfg'))
-            api = config.get(a, 'api')
-            token = config.get(a, 'token')
+            #config.read(os.path.expanduser('~/.buildpy.cfg'))
+            #api = config.get(a, 'api')
+            #token = config.get(a, 'token')
             publish = True
         except:
             print "ERROR: unable to load configuration file"
@@ -221,7 +221,8 @@ for o, a in opts:
         build_data_json = a
     if o == '-j':
         make_threads = int(a)
-        print("Parallel builds: {}".format(make_threads))
+
+print("Parallel builds: {}".format(make_threads))
 
 # Default umask for file creation
 os.umask(022)
@@ -263,6 +264,8 @@ if ccache and len(ccache):
 else:
     ccache_dir = None
 
+print "Cache: {}, cache dir: {}".format(ccache, ccache_dir)
+
 if os.path.exists('.git') and use_git:
     git_commit = subprocess.check_output('git log -n1 --format=%H', shell=True).strip()
     git_url = subprocess.check_output('git config --get remote.origin.url |cat', shell=True).strip()
@@ -279,6 +282,8 @@ if use_environment:
     git_branch = os.environ.get('BRANCH', git_branch)
     git_describe = os.environ.get('GIT_DESCRIBE', git_describe)
     git_describe_v = os.environ.get('GIT_DESCRIBE_VERBOSE', git_describe_v)
+
+print("AUTH {} {}".format(api, token))
 
 cc_cmd = "gcc -v 2>&1"
 if cross_compile:

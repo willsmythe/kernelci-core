@@ -1,0 +1,113 @@
+#
+# Azure Pipelines kernel build for a specific tree+branch+commit.
+#
+# This is functionally equivalent to the logic in build-trigger.jpl and build.jpl
+#
+# Parameters
+# ==========
+#
+#  TREE
+#    URL of the kernel Git repository
+#  TREE_NAME
+#    Name of the kernel Git repository (tree)
+#  BRANCH
+#    Name of the kernel branch within the tree
+#  SRC_TARBALL
+#    URL of the kernel source tarball
+#  GIT_DESCRIBE
+#    Output of 'git describe' at the revision of the snapshot
+#  GIT_DESCRIBE_VERBOSE
+#    Verbose output of 'git describe' at the revision of the snapshot
+#  COMMIT_ID
+#    Git commit SHA1 at the revision of the snapshot
+#  ARCH_LIST (x86 arm64 arm mips arc riscv)
+#    List of CPU architectures to build (space-separated)
+#  PUBLISH (boolean)
+#    Publish build results via the KernelCI backend API
+#  EMAIL (boolean)
+#    Send build results via email
+#  KCI_API_URL (https://api.kernelci.org)
+#    URL of the KernelCI backend API
+#  KCI_API_TOKEN
+#    KernelCI backend API token (secret)
+#  KCI_CORE_URL (https://github.com/kernelci/kernelci-core.git)
+#    URL of the kernelci-core repository
+#  KCI_CORE_BRANCH (master)
+#    Name of the branch to use in the kernelci-core repository
+
+trigger: none
+pr: none
+
+variables:
+  WORKSPACE: $(Build.SourcesDirectory)
+  KDIR: $(WORKSPACE)/linux
+  KCI_CORE: $(WORKSPACE)/kernelci-core
+
+  # TODO
+  #  CROSS_COMPILE: TBD
+  #  KBUILD_OUTPUT: TBD
+  #  CCACHE_DISABLE: TBD
+  #  CCACHE_DIR: TBD
+ 
+jobs:
+- job: Init
+  steps:
+    - checkout: none
+    - script: |
+        # Clone kernelci-core
+        rm -rf $(KCI_CORE)
+        git clone $(KCI_CORE_URL) $(KCI_CORE) --depth 1 # TODO --branch $(KCI_CORE_BRANCH)
+        # Download and extract Linux source
+        wget $(SRC_TARBALL) --no-verbose && mkdir -p $(KDIR) && tar xzf linux-src.tar.gz -C $(KDIR)
+      name: Init
+
+    - script: |
+        # Call "get-build-configs" and set its response (JSON representing configs to build) to output variable
+        echo "##vso[task.setvariable variable=configs;isOutput=true]$(node $(KCI_CORE)/get-build-configs.js)"
+      name: Configs
+      workingDirectory: $(KDIR)
+
+- job: Build
+  dependsOn: init
+  timeoutInMinutes: 45
+  #condition: TODO (only build if any configs are found)
+  strategy:
+    matrix: $[ dependencies.Init.outputs['Configs.configs'] ]
+    maxParallel: 5
+  variables:
+    DOCKER_BASE: kernelci/build-
+  steps:
+    - checkout: none      
+    - script: |
+        # Clone kernelci-core
+        rm -rf $(KCI_CORE)
+        git clone $(KCI_CORE_URL) $(KCI_CORE) --depth 1 # TODO --branch $(KCI_CORE_BRANCH)
+        # Download and extract Linux source
+        wget $(SRC_TARBALL) --no-verbose && mkdir -p $(KDIR) && tar xzf linux-src.tar.gz -C $(KDIR)
+      name: Init
+  
+    - task: Docker@1
+      displayName: 'Build kernel'
+      inputs:
+        command: Run an image           
+        runInBackground: false 
+        containerRegistryType: 'Container Registry'
+        dockerRegistryEndpoint: 'dockerhub'
+        imageName: '$(DOCKER_BASE)$(COMPILER)_$(ARCH)'
+        volumes: '$(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory)'
+        workingDirectory: $(KDIR)
+        containerCommand: '$(KCI_CORE)/build.py -i -e -p -c $(DEFCONFIG)'
+        envVars: |
+          ARCH
+          TREE
+          TREE_NAME
+          BRANCH
+          COMMIT_ID
+          COMPILER
+          GIT_DESCRIBE
+          GIT_DESCRIBE_VERBOSE
+          API
+          TOKEN
+      env:
+        API: $(KCI_API_URL)
+        TOKEN: $(KCI_API_TOKEN)

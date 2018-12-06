@@ -1,0 +1,64 @@
+#
+# Azure Pipelines job that checks configured trees for new commits
+#
+# When a new commit is found, a tarball is created and uploaded to storage, and a build is queued
+# This job is functionally equivalent to "kernel-trigger-tarball"
+#
+# Parameters
+# ==========
+#
+#  KCI_API_URL (https://api.kernelci.org)
+#    URL of the KernelCI backend API
+#  KCI_API_TOKEN (required)
+#    KernelCI backend API token (secret)
+#  KCI_STORAGE_URL (https://storage.kernelci.org)
+#    URL of the KernelCI storage server
+#  KCI_CORE_URL (https://github.com/kernelci/kernelci-core.git)
+#    URL of the kernelci-core repository
+#  KCI_CORE_BRANCH (master)
+#    Name of the branch to use in the kernelci-core repository
+#  LINUX_REMOTE_URL (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git)
+#    URL to seed default kernel sources from
+#
+# TODOs
+# =====
+#  1. Read tree+branch combinations (and tree URLs) from a configuration file (see example in "kci-config.json")
+#  2. Move Azure Pipelines-specific queuing logic out of "kernel-trigger-tarball.sh" and into here or differnt script
+# 
+
+jobs:
+- job:
+  timeoutInMinutes: 120
+  strategy:
+    matrix:
+      mainline#master: {}      
+      next#master: {}
+      khilman#to-build: {}
+      android#android-4.19: {}
+      # TODO add others (see #1 above)
+    maxParallel: 20
+
+  variables:
+    WORKSPACE: $(Build.SourcesDirectory)
+    KCI_CORE: $(WORKSPACE)/kernelci-core
+    TREE_BRANCH: $(Agent.JobName)
+
+  steps:
+  - checkout: none
+
+  - script: |
+      echo "Clone $(KCI_CORE_URL)"
+      rm -rf $(KCI_CORE)
+      git clone $(KCI_CORE_URL) $(KCI_CORE) --branch $(KCI_CORE_BRANCH)
+    displayName: 'Clone KernelCI Core'
+
+  - script: '$(KCI_CORE)/kernel-trigger-tarball.sh'
+    env:
+      KCI_API_TOKEN: $(KCI_API_TOKEN)
+    workingDirectory: $(WORKSPACE)
+    displayName: 'Check for new commits'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: $(Build.StagingDirectory)
+      artifactName: "$(TREE_BRANCH)-build.properties"

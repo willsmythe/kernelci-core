@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RETRIES=10
+RETRIES=3
 SLEEPTIME=5
 COUNT=0
 while [ $COUNT -lt $RETRIES ]
