@@ -86,28 +86,9 @@ jobs:
         wget $(SRC_TARBALL) --no-verbose && mkdir -p $(KDIR) && tar xzf linux-src.tar.gz -C $(KDIR)
       name: Init
   
-    - task: Docker@1
-      displayName: 'Build kernel'
-      inputs:
-        command: Run an image           
-        runInBackground: false 
-        containerRegistryType: 'Container Registry'
-        dockerRegistryEndpoint: 'dockerhub'
-        imageName: '$(DOCKER_BASE)$(COMPILER)_$(ARCH)'
-        volumes: '$(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory)'
-        workingDirectory: $(KDIR)
-        containerCommand: '$(KCI_CORE)/build.py -i -e -p -c $(DEFCONFIG)'
-        envVars: |
-          ARCH
-          TREE
-          TREE_NAME
-          BRANCH
-          COMMIT_ID
-          COMPILER
-          GIT_DESCRIBE
-          GIT_DESCRIBE_VERBOSE
-          API
-          TOKEN
+    - script: |
+        export varargs="-e ARCH -e TREE -e TREE_NAME -e BRANCH -e COMMIT_ID -e COMPILER -e GIT_DESCRIBE -e GIT_DESCRIBE_VERBOSE -e API -e TOKEN"
+        docker run --rm -it $varargs -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) -w $(KDIR) $(DOCKER_BASE)$(COMPILER)_$(ARCH) $(KCI_CORE)/build.py -i -e -p -c $(DEFCONFIG)
       env:
         API: $(KCI_API_URL)
         TOKEN: $(KCI_API_TOKEN)
