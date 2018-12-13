@@ -87,6 +87,7 @@ jobs:
       name: Init
   
     - script: |
+        echo $(env)
         export varargs="-e ARCH -e TREE -e TREE_NAME -e BRANCH -e COMMIT_ID -e COMPILER -e GIT_DESCRIBE -e GIT_DESCRIBE_VERBOSE -e API -e TOKEN"
         docker run --rm -i $varargs -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) -w $(KDIR) $(DOCKER_BASE)$(COMPILER)_$(ARCH) $(KCI_CORE)/build.py -i -e -p -c $(DEFCONFIG)
       env:
